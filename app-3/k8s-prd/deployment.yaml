@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-3-prd
+  namespace: app-3-prd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-3-prd
+  template:
+    metadata:
+      labels:
+        app: app-3-prd
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27
+          ports:
+            - containerPort: 80

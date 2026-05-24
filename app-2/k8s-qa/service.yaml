@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-2-qa-service
+  namespace: app-2-qa
+spec:
+  type: ClusterIP
+  selector:
+    app: app-2-qa
+  ports:
+    - port: 80
+      targetPort: 80
