@@ -4,7 +4,7 @@ metadata:
   name: gitops-project
   namespace: argocd
 spec:
-  description: Allow access to CSboylol GitOps repositories
+  description: Allow access to CSboylol GitOps repositories and Helm repositories
   sourceRepos:
     - https://github.com/CSboylol/gitops.git
     - https://github.com/CSboylol/flask-aws-monitor-helm.git
