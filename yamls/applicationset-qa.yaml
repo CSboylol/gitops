@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: qa-applicationset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - project: app-1
+            cluster: k8s-qa
+            env: qa
+          - project: app-2
+            cluster: k8s-qa
+            env: qa
+          - project: app-3
+            cluster: k8s-qa
+            env: qa
+  template:
+    metadata:
+      name: '{{.project}}-{{.env}}'
+    spec:
+      project: gitops-project
+      source:
+        repoURL: https://github.com/CSboylol/gitops.git
+        targetRevision: application
+        path: '{{.project}}/{{.cluster}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.project}}-{{.env}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
