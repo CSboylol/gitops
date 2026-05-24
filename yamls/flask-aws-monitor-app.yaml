@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flask-aws-monitor
+  namespace: argocd
+spec:
+  project: gitops-project
+  source:
+    repoURL: https://github.com/CSboylol/flask-aws-monitor-helm.git
+    targetRevision: main
+    path: helmchart
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: flask-aws-monitor
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
