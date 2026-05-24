@@ -7,6 +7,7 @@ spec:
   description: Allow access to CSboylol gitops repository
   sourceRepos:
     - https://github.com/CSboylol/gitops.git
+    - https://github.com/CSboylol/flask-aws-monitor-helm.git
   destinations:
     - namespace: '*'
       server: https://kubernetes.default.svc
