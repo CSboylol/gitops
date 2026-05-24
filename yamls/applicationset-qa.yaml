@@ -7,27 +7,30 @@ spec:
   generators:
     - list:
         elements:
-          - project: app-1
+          - name: app-1-qa
+            project: app-1
             cluster: k8s-qa
-            env: qa
-          - project: app-2
+            namespace: app-1-qa
+          - name: app-2-qa
+            project: app-2
             cluster: k8s-qa
-            env: qa
-          - project: app-3
+            namespace: app-2-qa
+          - name: app-3-qa
+            project: app-3
             cluster: k8s-qa
-            env: qa
+            namespace: app-3-qa
   template:
     metadata:
-      name: '{{.project}}-{{.env}}'
+      name: '{{name}}'
     spec:
       project: gitops-project
       source:
         repoURL: https://github.com/CSboylol/gitops.git
         targetRevision: application
-        path: '{{.project}}/{{.cluster}}'
+        path: '{{project}}/{{cluster}}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{.project}}-{{.env}}'
+        namespace: '{{namespace}}'
       syncPolicy:
         automated:
           prune: true
