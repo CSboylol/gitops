@@ -1,0 +1,22 @@
+replicaCount: 3
+
+image:
+  repository: csboylol23/flask-aws-monitor
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 5001
+  targetPort: 5001
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+
+ingress:
+  enabled: false
