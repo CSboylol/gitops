@@ -1,49 +1,87 @@
-# GitOps Repository
+# Flask AWS Monitor
 
 ## Overview
-This repository contains the ArgoCD GitOps configuration for the Flask AWS Monitor application.
+This repository contains a Flask application that displays AWS resources from the configured AWS account.
 
-ArgoCD uses an ApplicationSet to generate separate deployments for three environments:
+The application lists:
 
-- dev
-- qa
-- prd
+- EC2 instances
+- VPCs
+- Subnets
+- Load Balancers
+- AMIs owned by the account
 
-## Repository Structure
+## Repository Contents
 
-- charts/flask-aws-monitor - Helm chart used by ArgoCD
-- flask-aws-monitor/dev/values.yaml - Development configuration
-- flask-aws-monitor/qa/values.yaml - QA configuration
-- flask-aws-monitor/prd/values.yaml - Production configuration
-- yamls/flask-applicationset.yaml - ArgoCD ApplicationSet
-- yamls/gitops-project.yaml - ArgoCD AppProject
+- app.py - Flask application
+- requirements.txt - Python dependencies
+- Dockerfile - Container image definition
+- Jenkinsfile - CI/CD pipeline
+- helmchart - Helm chart for Kubernetes deployment
+- tests - Unit tests
 
-## Environment Differences
+## Local Run
 
-| Environment | Replicas | Service Type |
-| --- | --- | --- |
-| dev | 1 | ClusterIP |
-| qa | 2 | ClusterIP |
-| prd | 3 | LoadBalancer |
+Install dependencies:
 
-## Deployment
+pip install -r requirements.txt
 
-Apply the ArgoCD project:
+Run the application:
 
-kubectl apply -f yamls/gitops-project.yaml
+python app.py
 
-Apply the ApplicationSet:
+Open:
 
-kubectl apply -f yamls/flask-applicationset.yaml
+http://localhost:5001
 
-## Validation
+## Docker
 
-Verify the generated ArgoCD applications:
+Build the image:
 
-kubectl get applications -n argocd
+docker build -t flask-aws-monitor:local .
 
-Verify the deployed namespaces:
+Run the container:
 
-kubectl get namespaces
+docker run --rm -p 5001:5001 flask-aws-monitor:local
 
-Changes pushed to the GitOps repository are automatically synchronized by ArgoCD.
+## AWS Environment Variables
+
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- AWS_DEFAULT_REGION
+
+Do not commit real AWS credentials.
+
+## Tests
+
+python -m pytest
+
+## Helm Validation
+
+helm lint ./helmchart
+
+helm template flask-monitor ./helmchart
+
+## Jenkins Pipeline
+
+The Jenkins pipeline performs:
+
+- Repository checkout
+- Python linting
+- Python security scanning
+- Unit tests
+- Docker image build
+- Trivy container scan
+- Docker Hub push
+- Helm validation
+
+## Current Validation Status
+
+The application has passed:
+
+- Docker build
+- Local container run
+- HTTP 200 response check
+- Unit tests
+- Helm lint
+- Helm template rendering
