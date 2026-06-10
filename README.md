@@ -37,3 +37,21 @@ kubectl get applications -n argocd
 kubectl get namespaces
 
 Changes pushed to this repository are automatically synchronized by ArgoCD.
+
+## Local ArgoCD Validation
+
+ArgoCD was installed and validated successfully on a local Docker Desktop Kubernetes cluster.
+
+The ApplicationSet generated three applications:
+
+- flask-aws-monitor-dev - Synced and Healthy
+- flask-aws-monitor-qa - Synced and Healthy
+- flask-aws-monitor-prd - Synced and Healthy
+
+Validated environment behavior:
+
+- dev - 1 replica with ClusterIP service
+- qa - 2 replicas with ClusterIP service
+- prd - 3 replicas with LoadBalancer service
+
+The production application was successfully accessed through http://localhost:5001 and returned HTTP 200.
