@@ -1,87 +1,39 @@
-# Flask AWS Monitor
+# GitOps Repository
 
 ## Overview
-This repository contains a Flask application that displays AWS resources from the configured AWS account.
+This repository contains the ArgoCD GitOps configuration for the Flask AWS Monitor application.
 
-The application lists:
+ArgoCD uses an ApplicationSet to generate separate deployments for three environments:
 
-- EC2 instances
-- VPCs
-- Subnets
-- Load Balancers
-- AMIs owned by the account
+- dev
+- qa
+- prd
 
-## Repository Contents
+## Repository Structure
 
-- app.py - Flask application
-- requirements.txt - Python dependencies
-- Dockerfile - Container image definition
-- Jenkinsfile - CI/CD pipeline
-- helmchart - Helm chart for Kubernetes deployment
-- tests - Unit tests
+- charts/flask-aws-monitor - Helm chart used by ArgoCD
+- flask-aws-monitor/dev/values.yaml - Development configuration
+- flask-aws-monitor/qa/values.yaml - QA configuration
+- flask-aws-monitor/prd/values.yaml - Production configuration
+- yamls/flask-applicationset.yaml - ArgoCD ApplicationSet
+- yamls/gitops-project.yaml - ArgoCD AppProject
 
-## Local Run
+## Environment Differences
 
-Install dependencies:
+| Environment | Replicas | Service Type |
+| --- | --- | --- |
+| dev | 1 | ClusterIP |
+| qa | 2 | ClusterIP |
+| prd | 3 | LoadBalancer |
 
-pip install -r requirements.txt
+## Deployment
 
-Run the application:
+kubectl apply -f yamls/gitops-project.yaml
+kubectl apply -f yamls/flask-applicationset.yaml
 
-python app.py
+## Validation
 
-Open:
+kubectl get applications -n argocd
+kubectl get namespaces
 
-http://localhost:5001
-
-## Docker
-
-Build the image:
-
-docker build -t flask-aws-monitor:local .
-
-Run the container:
-
-docker run --rm -p 5001:5001 flask-aws-monitor:local
-
-## AWS Environment Variables
-
-- AWS_ACCESS_KEY_ID
-- AWS_SECRET_ACCESS_KEY
-- AWS_DEFAULT_REGION
-
-Do not commit real AWS credentials.
-
-## Tests
-
-python -m pytest
-
-## Helm Validation
-
-helm lint ./helmchart
-
-helm template flask-monitor ./helmchart
-
-## Jenkins Pipeline
-
-The Jenkins pipeline performs:
-
-- Repository checkout
-- Python linting
-- Python security scanning
-- Unit tests
-- Docker image build
-- Trivy container scan
-- Docker Hub push
-- Helm validation
-
-## Current Validation Status
-
-The application has passed:
-
-- Docker build
-- Local container run
-- HTTP 200 response check
-- Unit tests
-- Helm lint
-- Helm template rendering
+Changes pushed to this repository are automatically synchronized by ArgoCD.
