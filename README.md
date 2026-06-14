@@ -55,3 +55,31 @@ Validated environment behavior:
 - prd - 3 replicas with LoadBalancer service
 
 The production application was successfully accessed through http://localhost:5001 and returned HTTP 200.
+
+## Final Project Notes
+
+This repository is used as the GitOps source for the final DevOps project.
+
+ArgoCD reads this repository and deploys the Flask application to Kubernetes.
+
+Main deployment file:
+yamls/flask-applicationset.yaml
+
+The ApplicationSet creates three environments from the same Helm chart:
+
+| Environment | Replicas | Service Type |
+|-------------|----------|--------------|
+| dev | 1 | ClusterIP |
+| qa | 2 | ClusterIP |
+| prd | 3 | LoadBalancer |
+
+Helm chart location:
+charts/flask-aws-monitor
+
+Environment values files:
+flask-aws-monitor/dev/values.yaml
+flask-aws-monitor/qa/values.yaml
+flask-aws-monitor/prd/values.yaml
+
+During the local validation, ArgoCD created the three applications and the production service returned HTTP 200 from localhost:5001.
+
