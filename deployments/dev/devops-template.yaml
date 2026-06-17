@@ -25,7 +25,7 @@ metadata:
     app: flask-aws-monitor-flask-monitor
 
 spec:
-  replicas: 3
+  replicas: 4
 
   selector:
     matchLabels:
@@ -39,7 +39,7 @@ spec:
     spec:
       containers:
         - name: flask-aws-monitor
-          image: "csboylol23/flask-aws-monitor:5"
+          image: "csboylol23/flask-aws-monitor:6"
           imagePullPolicy: Always
 
           ports:
