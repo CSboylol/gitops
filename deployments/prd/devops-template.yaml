@@ -1,0 +1,63 @@
+---
+# Source: flask-aws-monitor/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-aws-monitor-service
+  labels:
+    app: flask-aws-monitor-flask-monitor
+spec:
+  type: ClusterIP
+  selector:
+    app: flask-aws-monitor-flask-monitor
+  ports:
+    - name: http
+      protocol: TCP
+      port: 5001
+      targetPort: 5001
+
+---
+# Source: flask-aws-monitor/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-aws-monitor-flask-monitor
+  labels:
+    app: flask-aws-monitor-flask-monitor
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: flask-aws-monitor-flask-monitor
+
+  template:
+    metadata:
+      labels:
+        app: flask-aws-monitor-flask-monitor
+
+    spec:
+      containers:
+        - name: flask-aws-monitor
+          image: "csboylol23/flask-aws-monitor:latest"
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 5001
+
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: ""
+            - name: AWS_SECRET_ACCESS_KEY
+              value: ""
+            - name: AWS_DEFAULT_REGION
+              value: "us-east-1"
+
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi

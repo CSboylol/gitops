@@ -9,7 +9,7 @@ spec:
         repoURL: https://github.com/CSboylol/gitops.git
         revision: main
         directories:
-          - path: flask-aws-monitor/*
+          - path: deployments/*
   template:
     metadata:
       name: 'flask-aws-monitor-{{path.basename}}'
@@ -18,10 +18,9 @@ spec:
       source:
         repoURL: https://github.com/CSboylol/gitops.git
         targetRevision: main
-        path: charts/flask-aws-monitor
-        helm:
-          valueFiles:
-            - '../../{{path}}/values.yaml'
+        path: '{{path}}'
+        directory:
+          recurse: true
       destination:
         server: https://kubernetes.default.svc
         namespace: 'flask-aws-monitor-{{path.basename}}'
